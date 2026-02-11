@@ -1,0 +1,21 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.venv/
+venv/
+
+# Playwright Authentication & State
+playwright/.auth/
+storage_state.json
+state.json
+
+# Reports & Debugging
+reports/
+allure-results/
+allure-report/
+test-results/
+
+# Secrets
+.env

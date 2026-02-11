@@ -1,0 +1,9 @@
+
+
+{
+  "base_url" : "https://demoqa.com",
+  "endpoints": {
+    "create_user": "/Account/v1/User",
+    "generate_token": "/Account/v1/GenerateToken"
+  }
+}
