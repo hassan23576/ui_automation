@@ -30,10 +30,7 @@ class LoginPage(BasePage):
         return self.page.get_by_role("button", name="Log out")
 
     def open_login_page(self):
-        logger.info(f"Opening login page: {self.base_url}{self.path}")
-        self.navigate_to(self.path)
-        expect(self.page).to_have_url(re.compile(f".*{self.path}$"))
-        self.verify_text(self.page.locator(".text-center"), "Login")
+        super().open_page(self.path, "Login")
 
     def perform_login(self, user, pwd):
         try:

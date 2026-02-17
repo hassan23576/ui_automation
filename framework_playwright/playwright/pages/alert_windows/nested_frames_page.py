@@ -22,9 +22,6 @@ class NestedFramesPage(BasePage):
         return self.page.frame_locator("#frame1").frame_locator("iframe[srcdoc*='Child']").locator("body")
 
 
-
     def open(self):
-        logger.info(f"Opening Nested Frames page: {self.base_url}{self.path}")
-        self.navigate_to(self.path)
-        expect(self.page).to_have_url(re.compile(f".*{self.path}$"))
-        self.verify_text(self.page.locator(".text-center"), "Nested Frames")
+        super().open_page(self.path, "Nested Frames")
+

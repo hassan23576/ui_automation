@@ -61,10 +61,7 @@ class AlertPage(BasePage):
 
 
     def open(self):
-        logger.info(f"Opening Alerts page: {self.base_url}{self.path}")
-        self.navigate_to(self.path)
-        expect(self.page).to_have_url(re.compile(f".*{self.path}$"))
-        self.verify_text(self.page.locator(".text-center"), "Alerts")
+        super().open_page(self.path, "Alerts")
 
 
     def verify_instruction_labels(self):

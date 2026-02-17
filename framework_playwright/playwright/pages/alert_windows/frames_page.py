@@ -25,7 +25,4 @@ class FramesPage(BasePage):
         return self.page.frame_locator("#frame2").locator("#sampleHeading")
 
     def open(self):
-        logger.info(f"Opening Frames page: {self.base_url}{self.path}")
-        self.navigate_to(self.path)
-        expect(self.page).to_have_url(re.compile(f".*{self.path}$"))
-        self.verify_text(self.page.locator(".text-center"), "Frames")
+        super().open_page(self.path, "Frames")

@@ -1,36 +1,56 @@
-from playwright.sync_api import expect
+import logging
 
-from framework_playwright.playwright.pages.elements.elements_base import ElementsBase
+from framework_playwright.playwright.pages.base_page import BasePage
 
+logger = logging.getLogger(__name__)
 
-class ButtonsPage(ElementsBase):
+class ButtonsPage(BasePage):
+    path = "/buttons"
+
+    def __init__(self, page, base_url):
+        super().__init__(page, base_url)
+
+    @property
+    def double_click_loc(self):
+        """Return the Double Click Locator"""
+        return self.page.locator("#doubleClickBtn")
+
+    @property
+    def right_click_loc(self):
+        """Return the Right Click Locator"""
+        return self.page.locator("#rightClickBtn")
+
+    @property
+    def dynamic_click_loc(self):
+        """Return the dynamic Click Locator"""
+        return self.page.get_by_role("button", name="Click Me", exact=True)
+
+    def retrieve_clicked_message(self, button_type):
+        """Return the clicked message"""
+        msg_loc = self.page.locator(f"#{button_type}Message")
+        return msg_loc
 
     def open(self):
-        super().open()
-        self.go_to("Buttons")
+        super().open_page(self.path, "Buttons")
 
-    def return_click_message(self, click_action):
-        message = self.page.locator(f"#{click_action}ClickMessage")
-        message.wait_for()
-        return message.inner_text()
+    def click_button_by_loc(self, button_type):
+        """Click Button based on parametrized button type"""
+        mapping = {
+            "doubleClick": lambda: self.double_click_loc.dblclick(),
+            "rightClick": lambda: self.right_click_loc.click(button="right"),
+            "dynamicClick": lambda: self.dynamic_click_loc.click()
 
-    def click_and_verify_buttons(self):
-        expect(self.center_text).to_have_text("Buttons")
-        buttons = [('Double Click Me', 'double'), ('Right Click Me', 'right'),
-                   ('Click Me', 'dynamic')]
+        }
 
-        for button_name, action_type in buttons:
-            button_el = self.page.get_by_role("button", name=button_name, exact=True)
-            button_el.scroll_into_view_if_needed()
-            if action_type == 'double':
-                button_el.dblclick()
-            elif action_type == 'right':
-                button_el.click(button='right')
-            elif action_type == 'dynamic':
-                button_el.click()
+        if button_type not in mapping:
+            raise Exception(f"Invalid button type {button_type}")
+        logger.info(f"Clicking '{button_type}' button")
 
-            message_el = self.page.locator(f"#{action_type}ClickMessage")
-            message_el.wait_for()
-            expect(message_el).to_have_text(f"You have done a {action_type} click")
+        mapping[button_type]()
 
-            print(f"[{action_type}] click successful.")
+
+
+
+
+
+

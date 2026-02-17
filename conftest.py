@@ -1,33 +1,7 @@
 import allure
 import pytest
 
-# def pytest_addoption(parser):
-#     parser.addoption("--browser_name", action="store", default="chrome")
-#     parser.addoption("--base_url", action="store", default="https://demoqa.com")
-#
-#
-# @pytest.fixture(scope="session")
-# def base_url(request):
-#     return request.config.getoption("--base_url")
-#
-#
-# @pytest.fixture
-# def page(playwright, request, base_url):
-#     # Select browser type
-#     browser_name = request.config.getoption("--browser_name")
-#     browser_type = playwright.chromium if browser_name == "chrome" else playwright.firefox
-#
-#     # Launch browser
-#     browser = browser_type.launch(headless=False)
-#
-#     context = browser.new_context(base_url=base_url, viewport={'width': 1920, 'height': 1080})
-#
-#     new_page = context.new_page()
-#     yield new_page
-#
-#     context.close()
-#     browser.close()
-
+from utils.data_factory import DataFactory
 
 
 @pytest.fixture
@@ -89,6 +63,11 @@ def pytest_runtest_makereport(item, call):
                 )
         except Exception:
             pass
+
+
+@pytest.fixture(scope="session")
+def factory():
+    return DataFactory()
 
 
 
