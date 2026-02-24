@@ -2,6 +2,7 @@ import os
 
 import logging
 import re
+import random
 
 from playwright.sync_api import Page, expect, Locator
 from typing import Any
@@ -82,6 +83,33 @@ class BasePage:
         logger.info(f"Attempting to click on menu item: '{item_name}'")
         menu_list.click()
 
+    def select_random_from_dropdown(self, dropdown_loc, item_loc):
+        dropdown = self.page.locator(dropdown_loc)
+        dropdown.scroll_into_view_if_needed()
+        dropdown.click()
+
+        options = self.page.locator(item_loc).filter(has_text=re.compile(r".+"))
+        options.first.wait_for(state="visible")
+
+        count = options.count()
+        random_index = random.randint(0, count - 1)
+
+        selected_item = options.nth(random_index)
+        item_text = selected_item.inner_text().strip()
+
+        selected_item.click()
+        return item_text
+
+    def select_random_item(self, item_loc):
+        items = self.page.locator(item_loc)
+        items.first.wait_for(state="visible")
+
+        selected_item = items.nth(random.randint(0, items.count() -1))
+        selected_item.scroll_into_view_if_needed()
+
+        text = selected_item.inner_text().strip()
+        selected_item.click()
+        return text
 
 
 

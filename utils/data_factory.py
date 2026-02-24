@@ -7,27 +7,33 @@ class DataFactory:
         self.faker = Faker()
 
 
-    def get_first_name(self):
+    def first_name(self):
         return self.faker.first_name()
 
-    def get_last_name(self):
+    def last_name(self):
         return self.faker.last_name()
 
-    def get_email(self):
+    def email(self):
         return self.faker.email()
 
-    def get_address(self):
-        return self.faker.address()
+    def address(self):
+        return self.faker.address().replace("\n", " ")
 
     def get_full_name(self):
-        full_name = f'{self.get_first_name()} {self.get_last_name()}'
+        full_name = f'{self.first_name()} {self.last_name()}'
         return full_name
+
+    def phone_number(self):
+        return self.faker.phone_number()
+
+    def mobile_number(self):
+        return self.faker.numerify('##########')
 
     def get_text_box_data(self):
         """Generates the specific dictionary needed for the TextBox page"""
         return {
             'full_name': self.get_full_name(),
-            'email': self.get_email(),
-            'address': self.get_address().replace("\n", " "),
-            'permanent_address': self.get_address().replace("\n", " "),
+            'email': self.email(),
+            'address': self.address(),
+            'permanent_address': self.address(),
         }

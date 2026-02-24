@@ -35,14 +35,14 @@ def test_navigation_to_frame_section(page, base_url):
 @pytest.mark.smoke
 @pytest.mark.parametrize("elements_group, menu_list_item",
                          [("Elements", "Text Box"),
-                          # ("Elements", "Check Box"),
-                          # ("Elements", "Radio Button"),
-                          # ("Elements", "Web Tables"),
-                          # ("Elements", "Buttons"),
-                          # ("Elements", "Links"),
-                          # ("Elements", "Broken Links - Images"),
-                          # ("Elements", "Upload and Download"),
-                          # ("Elements", "Dynamic Properties")
+                          ("Elements", "Check Box"),
+                          ("Elements", "Radio Button"),
+                          ("Elements", "Web Tables"),
+                          ("Elements", "Buttons"),
+                          ("Elements", "Links"),
+                          ("Elements", "Broken Links - Images"),
+                          ("Elements", "Upload and Download"),
+                          ("Elements", "Dynamic Properties")
                           ])
 def test_elements_menu_list_navigation(page, base_url, elements_group, menu_list_item):
     logger.info(f"--- Running Elements Menu List Navigation ---")
