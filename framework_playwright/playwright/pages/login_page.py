@@ -27,7 +27,7 @@ class LoginPage(BasePage):
 
     @property
     def logout_button(self):
-        return self.page.get_by_role("button", name="Log out")
+        return self.page.get_by_role("button", name="Logout")
 
     def open_login_page(self):
         super().open_page(self.path, "Login")

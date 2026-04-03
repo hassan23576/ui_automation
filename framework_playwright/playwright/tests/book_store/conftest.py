@@ -1,14 +1,18 @@
 import pytest
-
+from playwright.sync_api import Browser
+from framework_playwright.playwright.api.bookstore_api import BookStoreApi
 from framework_playwright.playwright.pages.login_page import LoginPage
-from utils.api_utils import create_dynamic_user, generate_token, save_api_auth_state
 
 
 @pytest.fixture(scope="session")
-def api_user():
+def bookstore_api():
+    return BookStoreApi()
+
+@pytest.fixture(scope="session")
+def api_user(bookstore_api):
     """Create a user via API and provides credentials in the suite"""
 
-    user_data = create_dynamic_user()
+    user_data = bookstore_api.create_dynamic_user()
     return user_data
 
 
@@ -25,14 +29,29 @@ def auth_page(page, api_user, base_url):
 
 
 @pytest.fixture(scope="session")
-def api_auth_state():
+def api_auth_state(bookstore_api, api_user):
     """Bypasses UI login by creating a user and token via API."""
-    # Create User
-    user = create_dynamic_user()
-    # Get Token
-    token = generate_token(user["username"], user["password"])
-    # Save JSON
-    auth_data = {"token": token, "username": user["username"]}
-    auth_path = save_api_auth_state(auth_data)
+    token = bookstore_api.generate_token(
+        api_user["username"],
+        api_user["password"]
+    )
 
+    auth_data = {
+        "token": token,
+        "username": api_user["username"],
+        "userId": api_user["userId"]
+    }
+
+    auth_path = bookstore_api.save_api_auth_state(auth_data)
     return auth_path
+
+@pytest.fixture
+def authenticated_page(browser: Browser, api_auth_state, base_url):
+    """Creates a browser page with pre-authenticated state"""
+    context = browser.new_context(
+        storage_state=api_auth_state,
+        base_url=base_url
+    )
+    page = context.new_page()
+    yield page
+    context.close()
